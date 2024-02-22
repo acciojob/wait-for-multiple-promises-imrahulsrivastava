@@ -9,7 +9,7 @@ function createPromise(min, max) {
 
 function addLoadingText() {
   const output = document.getElementById("output");
-  output.innerHTML += `<tr><td colspan="2">Loading...</td></tr>`;
+  output.innerHTML += `<tr id="loading"><td colspan="2">Loading...</td></tr>`;
 }
 
 function removeLoadingText() {
