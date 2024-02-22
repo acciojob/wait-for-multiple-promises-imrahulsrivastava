@@ -2,7 +2,7 @@ function createPromise(count) {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(count);
-    }, count);
+    }, count * 1000);
   });
 }
 
