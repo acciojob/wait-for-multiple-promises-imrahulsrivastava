@@ -1,65 +1,55 @@
-let table = document.querySelector("#output");
- 
-function createRow(i, delay) {
-  // Create a new row
-  let newRow = table.insertRow();
- 
-  // Insert two cells (columns) into the new row
-  let cell1 = newRow.insertCell(0);
-  let cell2 = newRow.insertCell(1);
- 
-  // Add data to the cells
-  if (typeof i == "number") {
-    cell1.innerHTML = `Promise ${i}`;
-  } else {
-    cell1.innerHTML = i;
-  }
-  cell2.innerHTML = delay;
+//your JS code here. If required.
+const res = document.getElementById("output");
+
+const promises = [
+  new Promise((resolve) => {
+    const time = Math.floor(Math.random() * 3 + 1) * 1000;
+    setTimeout(() => resolve({ name: "Promise 1", time: time / 1000 }), time);
+  }),
+  new Promise((resolve) => {
+    const time = Math.floor(Math.random() * 3 + 1) * 1000;
+    setTimeout(() => resolve({ name: "Promise 2", time: time / 1000 }), time);
+  }),
+  new Promise((resolve) => {
+    const time = Math.floor(Math.random() * 3 + 1) * 1000;
+    setTimeout(() => resolve({ name: "Promise 3", time: time / 1000 }), time);
+  }),
+];
+
+async function callFns() {
+  const start = new Date();
+  // Use Promise.all to wait for all Promises to resolve
+  res.innerHTML += `
+            <tr id="loading">
+                <td colspan=2>Loading...</td>
+            </tr>
+          `;
+  await Promise.all(promises)
+    .then((results) => {
+      res.innerHTML = ``;
+      // Log the array of results
+      results.forEach((e) => {
+        res.innerHTML += `
+            <tr>
+                <td>${e.name}</td>
+                <td>${e.time}</td>
+            </tr>
+          `;
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  const end = new Date();
+
+  const timeInMillis = end - start;
+  res.innerHTML += `
+            <tr>
+                <td>Total</td>
+                <td>${timeInMillis / 1000}</td>
+            </tr>
+          `;
 }
- 
-createRow("Loading...", "Loading...");
- 
-function generateRandom() {
-  const randomNumber = (Math.random() * (3 - 1) + 1).toFixed(3);
-  return parseFloat(randomNumber);
-}
- 
-const p1 = new Promise((resolve) => {
-  let delay = generateRandom();
- 
-  setTimeout(() => {
-    resolve({ message: "P1 Passed", time: delay });
-  }, delay * 1000);
-});
- 
-const p2 = new Promise((resolve) => {
-  let delay = generateRandom();
- 
-  setTimeout(() => {
-    resolve({ message: "P2 Passed", time: delay });
-  }, delay * 1000);
-});
- 
-const p3 = new Promise((resolve) => {
-  let delay = generateRandom();
- 
-  setTimeout(() => {
-    resolve({ message: "P2 Passed", time: delay });
-  }, delay * 1000);
-});
- 
-let promiseArr = [p1, p2, p3];
- 
-Promise.all(promiseArr).then((values) => {
-  table.children[0].remove();
-  createRow(1, "");
-  createRow(2, "");
-  createRow(3, "");
-  let total = 0;
-  values.forEach((result, i) => {
-    total += result.time;
-    table.children[i].children[1].textContent = result.time;
-  });
- 
-  createRow("Total", parseFloat(total.toFixed(3)));
-});
+
+callFns();
