@@ -1,9 +1,8 @@
-function createPromise(min, max) {
-  const randomTime = Math.floor(Math.random() * (max - min + 1) + min) * 1000;
+function createPromise(count) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(randomTime / 1000);
-    }, randomTime);
+      resolve(count);
+    }, count);
   });
 }
 
@@ -30,11 +29,7 @@ function updateTable(results) {
 }
 
 function main() {
-  const promises = [
-    createPromise(1, 3),
-    createPromise(1, 3),
-    createPromise(1, 3),
-  ];
+  const promises = [createPromise(1), createPromise(2), createPromise(3)];
 
   addLoadingText();
 
